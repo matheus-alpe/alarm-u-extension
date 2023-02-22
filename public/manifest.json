@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Alarm U",
+  "version": "0.0.1",
+
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "permissions": ["tabs", "scripting", "storage"],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "*.html",
+        "*.svg",
+        "*.js",
+        "*.css",
+        "*.svg"
+      ],
+      "matches": ["https://*/*", "http://*/*"]
+    }
+  ],
+  "externally_connectable": {
+    "matches": ["https://*/*", "http://*/*"]
+  },
+  "action": {}
+}
