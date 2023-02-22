@@ -3,5 +3,5 @@
   "semi": false,
   "singleAttributePerLine": true,
   "bracketSpacing": true,
-  "vueIndentScriptAndStyle": true
+  "vueIndentScriptAndStyle": false
 }

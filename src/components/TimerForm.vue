@@ -1,22 +1,37 @@
 <script lang="ts" setup>
-  import { AddCircle16Filled } from '@vicons/fluent'
-  import TimerItem from './TimerItem.vue'
+import { ref } from 'vue'
+import { NButton, NIcon } from 'naive-ui'
+import { AddCircle16Filled } from '@vicons/fluent'
+import TimerItem from './TimerItem.vue'
+
+const showForm = ref(false)
 </script>
 
 <template>
-  <form>
-    <TimerItem />
+  <div class="form-timer">
+    <form v-if="showForm">
+      <TimerItem />
+    </form>
 
     <NButton
+      v-else
       dashed
       type="primary"
+      @click="showForm = true"
     >
       <NIcon
         :component="AddCircle16Filled"
         size="24"
       />
     </NButton>
-  </form>
+  </div>
 </template>
 
-<style></style>
+<style lang="scss">
+.form-timer {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+</style>
