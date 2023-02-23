@@ -6,12 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "build:ext": "vue-tsc && vite build -c src-extension/extension.vite.config.js",
+    "preview": "vite preview",
+    "clear": "rm -rf ./dist"
   },
   "dependencies": {
     "vue": "^3.2.45"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.217",
+    "@types/node": "^18.14.0",
     "@vicons/fluent": "^0.12.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "naive-ui": "^2.34.3",
