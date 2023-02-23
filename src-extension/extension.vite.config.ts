@@ -5,6 +5,9 @@ import path from 'path'
 export default defineConfig({
   build: {
     sourcemap: true,
+
+    emptyOutDir: false,
+
     rollupOptions: {
       input: {
         content: path.resolve(__dirname, 'content.ts'),

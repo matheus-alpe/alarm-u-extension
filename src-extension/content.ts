@@ -1,5 +1,5 @@
 function createIframe() {
-  const iframeId = 'redirect-switch-modal'
+  const iframeId = 'alarm-u-modal'
   const iframeAlreadyExist = document.getElementById(iframeId)
   if (iframeAlreadyExist) {
     chrome.runtime.sendMessage({ message: 'close-modal' })

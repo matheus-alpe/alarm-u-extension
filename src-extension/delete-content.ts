@@ -1,5 +1,5 @@
-(function deleteIframe() {
-  const iframeId = 'redirect-switch-modal'
+;(function deleteIframe() {
+  const iframeId = 'alarm-u-modal'
   const iframeAlreadyExist = document.getElementById(iframeId)
   iframeAlreadyExist && iframeAlreadyExist.remove()
 })()
