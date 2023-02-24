@@ -20,7 +20,7 @@ function createIframe() {
   return iframe
 }
 
-function injectModal(iframe) {
+function injectModal(iframe: HTMLIFrameElement | undefined) {
   if (!iframe) return
   document.body.insertAdjacentElement('beforeend', iframe)
 }
