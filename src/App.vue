@@ -1,28 +1,27 @@
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive, onBeforeMount } from 'vue'
 import { NConfigProvider, darkTheme } from 'naive-ui'
+
+import { storage } from './utils'
 
 import Header from './components/TimerHeader.vue'
 import TimerItem from './components/TimerItem.vue'
 
-type Alarm = {
-  id: string
-  active: boolean
-  time: string
-  title: string
-  url?: string
-}
-
 const timers = reactive<Alarm[]>([])
 
-function addTimer() {
+async function addTimer() {
   timers.push({
-    id: '1',
     active: true,
-    time: '21:20',
-    title: 'teste',
+    time: '23:23',
   })
+
+  await storage.set('timers', timers)
 }
+
+onBeforeMount(async () => {
+  const storageTimers = await storage.get<Alarm[]>('timers')
+  storageTimers && storageTimers.forEach((timer) => timers.push(timer))
+})
 </script>
 
 <template>
@@ -33,10 +32,12 @@ function addTimer() {
     <Header @add="addTimer" />
 
     <ul v-if="timers.length">
-      <TimerItem
-        v-for="timer in timers"
-        :key="timer.id"
-      />
+      <li
+        v-for="(timer, index) in timers"
+        :key="index"
+      >
+        <TimerItem :timer="timer" />
+      </li>
     </ul>
   </NConfigProvider>
 </template>
