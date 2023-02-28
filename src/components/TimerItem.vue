@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+/*
+  TODO: bind prop value on formData
+*/
+import { reactive, ref, watch } from 'vue'
+import { debounce } from '../utils'
 import { NTimePicker, NSwitch, NButton, NIcon, NInput } from 'naive-ui'
 import {
   ClockDismiss20Regular,
@@ -7,19 +11,25 @@ import {
   LinkDismiss20Filled,
 } from '@vicons/fluent'
 
-const time = ref(null)
-const isEnable = ref(false)
+const emit = defineEmits(['update', 'remove'])
 
-watch(time, () => {
-  isEnable.value = !!time.value
+const formData = reactive<Alarm>({})
+
+watch(formData, () => {
+  if (!formData.time) {
+    formData.active = !!formData.time
+  }
+
+  submit()
 })
 
-function handleClick() {
-  if (!time.value) return
-  time.value = null
+const showURLInput = ref(false)
+
+function toggleURLInput() {
+  showURLInput.value = !showURLInput.value
 }
 
-const showURLInput = ref(false)
+const submit = debounce(() => emit('update', formData))
 </script>
 
 <template>
@@ -27,21 +37,26 @@ const showURLInput = ref(false)
     <NSwitch
       size="small"
       title="Active alarm"
-      v-model:value="isEnable"
-      :disabled="!time"
+      v-model:value="formData.active"
+      :disabled="!formData.time"
     />
 
     <NTimePicker
       class="time-input"
-      v-model:value="time"
-      format="h:mm a"
+      v-model:formatted-value="formData.time"
+      @update:formatted-value="formData.active = !!formData.time"
+      format="HH:mm"
       placeholder="Time"
     />
 
-    <NInput placeholder="Title" />
+    <NInput
+      v-model:value="formData.title"
+      placeholder="Title"
+    />
 
     <NInput
       v-if="showURLInput"
+      v-model:value="formData.url"
       placeholder="URL"
     />
 
@@ -50,7 +65,7 @@ const showURLInput = ref(false)
       circle
       title="Add URL redirect"
       :type="showURLInput ? 'error' : 'default'"
-      @click="showURLInput = !showURLInput"
+      @click="toggleURLInput"
     >
       <template #icon>
         <NIcon
@@ -65,7 +80,7 @@ const showURLInput = ref(false)
       circle
       type="error"
       title="Remove alarm"
-      @click="handleClick"
+      @click="$emit('remove')"
     >
       <template #icon>
         <NIcon

@@ -11,10 +11,27 @@ const timers = reactive<Alarm[]>([])
 
 async function addTimer() {
   timers.push({
-    active: true,
-    time: '23:23',
+    active: false,
+    time: undefined,
+    title: undefined,
+    url: undefined,
   })
 
+  await storage.set('timers', timers)
+}
+
+async function updateTimer(index: number, formData: Alarm) {
+  const selectedTimer = timers[index]
+
+  Object.entries(formData).forEach(([key, value]) => {
+    selectedTimer[key as keyof Alarm] = value as any
+  })
+
+  await storage.set('timers', timers)
+}
+
+async function removeTimer(index: number) {
+  timers.splice(index, 1)
   await storage.set('timers', timers)
 }
 
@@ -36,7 +53,11 @@ onBeforeMount(async () => {
         v-for="(timer, index) in timers"
         :key="index"
       >
-        <TimerItem :timer="timer" />
+        <TimerItem
+          :timer="timer"
+          @update="(formData) => updateTimer(index, formData)"
+          @remove="removeTimer(index)"
+        />
       </li>
     </ul>
   </NConfigProvider>
