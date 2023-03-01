@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-/*
-  TODO: bind prop value on formData
-*/
 import { reactive, ref, watch } from 'vue'
 import { debounce } from '../utils'
 import { NTimePicker, NSwitch, NButton, NIcon, NInput } from 'naive-ui'
@@ -11,9 +8,26 @@ import {
   LinkDismiss20Filled,
 } from '@vicons/fluent'
 
+const { timer } = defineProps<{ timer: Alarm }>()
 const emit = defineEmits(['update', 'remove'])
 
 const formData = reactive<Alarm>({})
+const showURLInput = ref(false)
+
+if (timer) {
+  watch(
+    timer,
+    () => {
+      Object.entries(timer).forEach(([key, value]) => {
+        formData[key as keyof Alarm] = value as any
+      })
+      showURLInput.value = !!timer.url
+    },
+    {
+      immediate: true,
+    }
+  )
+}
 
 watch(formData, () => {
   if (!formData.time) {
@@ -23,9 +37,8 @@ watch(formData, () => {
   submit()
 })
 
-const showURLInput = ref(false)
-
 function toggleURLInput() {
+  timer.url = undefined
   showURLInput.value = !showURLInput.value
 }
 
