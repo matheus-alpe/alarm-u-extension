@@ -8,3 +8,8 @@ export function debounce(callback: Function, wait: number = 500) {
     timeoutID = setTimeout(() => callback(args), wait)
   }
 }
+
+export function emitMessage(message: string) {
+  if (!chrome) return
+  chrome.runtime.sendMessage({ message: message })
+}

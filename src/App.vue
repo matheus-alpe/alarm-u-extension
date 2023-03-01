@@ -2,7 +2,7 @@
 import { reactive, onBeforeMount } from 'vue'
 import { NConfigProvider, darkTheme } from 'naive-ui'
 
-import { storage } from './utils'
+import { storage, emitMessage } from './utils'
 
 import Header from './components/TimerHeader.vue'
 import TimerItem from './components/TimerItem.vue'
@@ -46,7 +46,10 @@ onBeforeMount(async () => {
     :theme="darkTheme"
     class="container"
   >
-    <Header @add="addTimer" />
+    <Header
+      @add="addTimer"
+      @close="emitMessage('close-modal')"
+    />
 
     <ul v-if="timers.length">
       <li

@@ -1,66 +1,6 @@
-//background.js
-console.log('service_work started')
-
-async function getCurrentTab() {
-  let [tab] = await chrome.tabs.query({
-    active: true,
-    currentWindow: true,
-    url: ['https://*/*', 'http://*/*'],
-  })
-  return tab
-}
-
-function injectContentScript(tabId, file) {
-  chrome.scripting.executeScript({
-    target: { tabId },
-    files: [file],
-  })
-}
-
-async function initializeModal() {
-  const tab = await getCurrentTab()
-  if (!tab) return
-  injectContentScript(tab.id, 'content.js')
-}
-
-async function messageHandler({ message }) {
-  console.log('message handler:', message)
-
-  const tab = await getCurrentTab()
-  if (!tab) return
-
-  if (message === 'close-modal') {
-    injectContentScript(tab.id, 'delete-content.js')
-  }
-}
-
-chrome.action.onClicked.addListener(initializeModal)
-
-chrome.runtime.onMessage.addListener(messageHandler)
-
-chrome.storage.onChanged.addListener((storageDifference) => {
-  console.log('diff chrome.storage.onChanged:', storageDifference)
-})
+import './listeners'
 
 /**
-let injectFile = document.getElementById('inject-file');
-let injectFunction = document.getElementById('inject-function');
-
-async function getCurrentTab() {
-  let queryOptions = { active: true, currentWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return tab;
-}
-
-injectFile.addEventListener('click', async () => {
-  let tab = await getCurrentTab();
-
-  chrome.scripting.executeScript({
-    target: {tabId: tab.id},
-    files: ['content-script.js']
-  });
-});
-
 function showAlert(givenName) {
   alert(`Hello, ${givenName}`);
 }

@@ -10,8 +10,12 @@ export default defineConfig({
 
     rollupOptions: {
       input: {
-        content: path.resolve(__dirname, 'content.ts'),
-        'delete-content': path.resolve(__dirname, 'delete-content.ts'),
+        content: path.resolve(__dirname, 'public', 'content.ts'),
+        'delete-content': path.resolve(
+          __dirname,
+          'public',
+          'delete-content.ts'
+        ),
         'service-worker': path.resolve(__dirname, 'service-worker.ts'),
       },
       output: {
