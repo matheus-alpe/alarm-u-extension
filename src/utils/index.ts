@@ -1,4 +1,5 @@
 export * as storage from './storage'
+export * as uuid from './uuid'
 
 export function debounce(callback: Function, wait: number = 500) {
   let timeoutID: any

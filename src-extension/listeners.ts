@@ -1,27 +1,12 @@
-import { getCurrentTab, injectContentScript } from './api'
-console.log('service_work started')
+import { alarm } from './api'
+import { modal } from './utils'
 
-async function initializeModal() {
-  const tabId = await getCurrentTab()
-  if (!tabId) return
-  injectContentScript(tabId, 'content.js')
-}
+chrome.alarms.onAlarm.addListener(alarm.notify)
 
-async function messageHandler({ message }: { message: string }) {
-  const tabId = await getCurrentTab()
-  console.log('message tab:', tabId, message)
+chrome.runtime.onStartup.addListener(alarm.setTimers)
 
-  if (!tabId) return
+chrome.storage.onChanged.addListener(alarm.setTimers)
 
-  if (message === 'close-modal') {
-    injectContentScript(tabId, 'delete-content.js')
-  }
-}
+chrome.action.onClicked.addListener(modal.inject)
 
-chrome.action.onClicked.addListener(initializeModal)
-
-chrome.runtime.onMessage.addListener(messageHandler)
-
-chrome.storage.onChanged.addListener((storageDifference) => {
-  console.log('diff chrome.storage.onChanged:', storageDifference)
-})
+chrome.runtime.onMessage.addListener(modal.handler)

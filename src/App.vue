@@ -2,7 +2,7 @@
 import { reactive, onBeforeMount } from 'vue'
 import { NConfigProvider, darkTheme } from 'naive-ui'
 
-import { storage, emitMessage } from './utils'
+import { storage, emitMessage, uuid } from './utils'
 
 import Header from './components/TimerHeader.vue'
 import TimerItem from './components/TimerItem.vue'
@@ -11,6 +11,7 @@ const timers = reactive<Alarm[]>([])
 
 async function addTimer() {
   timers.push({
+    id: uuid.generate(),
     active: false,
     time: undefined,
     title: undefined,
