@@ -2,7 +2,8 @@ export function get<T>(key: string) {
   return new Promise<T>((resolve, reject) => {
     try {
       if (process.env.NODE_ENV !== 'development') {
-        chrome.storage.sync.get(key, (response) => resolve(response as T))
+        chrome.storage.sync.get(key, (response) => resolve(response[key] as T))
+        return
       }
 
       const value = window.localStorage.getItem(key)

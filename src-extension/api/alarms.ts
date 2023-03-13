@@ -11,10 +11,30 @@ import { getCurrentTab } from './tabs'
 export async function setTimers() {
   const timers = await storage.get('timers')
   console.log(timers)
-  // chrome.alarms.create('alarmid', {
-  //   delayInMinutes: 0.1,
-  //   periodInMinutes: 0.1,
+  // TODAY_DATE = new Date()
+
+  // chrome.alarms.create('alarm with when', {
+  //   when: Number(new Date(TODAY_DATE.getFullYear(), TODAY_DATE.getMonth(), TODAY_DATE.getDate(), 20, 42, 0, 0))
   // })
+
+  //   let tab = await getCurrentTab();
+
+  //   let name = "World";
+  //   chrome.scripting.executeScript({
+  //     target: { tabId: tab.id },
+  //     func: showAlert,
+  //     args: [name],
+  //   });
+  //   chrome.notifications.create(
+  //     "",
+  //     {
+  //       type: "basic",
+  //       iconUrl: "/favicon.ico",
+  //       title: "Bate o ponto",
+  //       message: "Não esquece o ponto",
+  //     },
+  //     console.log
+  //   );
 }
 
 function alert(givenName: string) {

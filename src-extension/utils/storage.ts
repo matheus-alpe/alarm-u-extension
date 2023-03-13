@@ -1,7 +1,7 @@
 export function get<T>(key: string) {
   return new Promise<T>((resolve, reject) => {
     try {
-      chrome.storage.sync.get(key, (response) => resolve(response as T))
+      chrome.storage.sync.get(key, (response) => resolve(response[key] as T))
     } catch (error) {
       reject(error)
     }
