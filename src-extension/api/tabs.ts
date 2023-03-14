@@ -7,3 +7,6 @@ export async function getCurrentTab() {
 
   return tab && tab.id
 }
+export function createTab(url: string) {
+  chrome.tabs.create({ url })
+}

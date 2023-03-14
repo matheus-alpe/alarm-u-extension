@@ -39,7 +39,7 @@ async function removeTimer(index: number) {
 onBeforeMount(async () => {
   if (process.env.NODE_ENV !== 'development') {
     const response = await storage.get<object>('timers')
-    const timersList = Object.values(response) as Alarm[]
+    const timersList = response && (Object.values(response) as Alarm[])
     timersList && timersList.forEach((timer) => timers.push(timer))
     return
   }

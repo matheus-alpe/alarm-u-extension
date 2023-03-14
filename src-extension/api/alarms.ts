@@ -1,66 +1,55 @@
 import { storage } from '../utils'
-import { getCurrentTab } from './tabs'
+import { createTab, getCurrentTab, injectAlertScript, notification } from '.'
 
-/*
-  TODO: implement setupTimers
-  TODO: implement checkTimer
-  TODO: implement removeTimer
-*/
+async function getAllAlarmsInfo() {
+  const response = await storage.get<object>('timers')
+  return Object.values(response) as AlarmInfo[]
+}
 
-// TODO: iterate each stored timer and create an alarm if don'st exist.
+function defineAlarm(timer: AlarmInfo) {
+  if (!timer.active) return
+  const [hours, minutes] = timer.time.split(':').map(Number)
+
+  const TODAY_DATE = new Date()
+
+  chrome.alarms.create(timer.id, {
+    when: Number(
+      new Date(
+        TODAY_DATE.getFullYear(),
+        TODAY_DATE.getMonth(),
+        TODAY_DATE.getDate(),
+        hours,
+        minutes,
+        0,
+        0
+      )
+    ),
+  })
+
+  console.log(hours, minutes, 'alarm setted')
+}
+
 export async function setTimers() {
-  const timers = await storage.get('timers')
-  console.log(timers)
-  // TODAY_DATE = new Date()
-
-  // chrome.alarms.create('alarm with when', {
-  //   when: Number(new Date(TODAY_DATE.getFullYear(), TODAY_DATE.getMonth(), TODAY_DATE.getDate(), 20, 42, 0, 0))
-  // })
-
-  //   let tab = await getCurrentTab();
-
-  //   let name = "World";
-  //   chrome.scripting.executeScript({
-  //     target: { tabId: tab.id },
-  //     func: showAlert,
-  //     args: [name],
-  //   });
-  //   chrome.notifications.create(
-  //     "",
-  //     {
-  //       type: "basic",
-  //       iconUrl: "/favicon.ico",
-  //       title: "Bate o ponto",
-  //       message: "Não esquece o ponto",
-  //     },
-  //     console.log
-  //   );
+  chrome.alarms.clearAll()
+  const timers = await getAllAlarmsInfo()
+  timers.forEach(defineAlarm)
 }
 
-function alert(givenName: string) {
-  alert(`Hello, ${givenName}`)
+type ChromeAlarm = {
+  name: string
 }
 
-export async function notify() {
+export async function notify(alarm: ChromeAlarm) {
+  // TODO: fix alarm trigger
+  const timers = await getAllAlarmsInfo()
+  const selectedTimer = timers.find((timer) => timer.id === alarm.name)
+  if (!selectedTimer) return
+
   let tabId = await getCurrentTab()
-  if (!tabId) return
+  if (tabId) {
+    injectAlertScript(tabId, selectedTimer)
+  }
+  notification.create(selectedTimer)
 
-  // let name = 'World'
-
-  // chrome.scripting.executeScript({
-  //   target: { tabId },
-  //   func: alert,
-  //   args: [name],
-  // })
-
-  // chrome.notifications.create(
-  //   '',
-  //   {
-  //     type: 'basic',
-  //     iconUrl: '/favicon.ico',
-  //     title: 'Bate o ponto',
-  //     message: 'Não esquece o ponto',
-  //   },
-  //   console.log
-  // )
+  if (selectedTimer.url) createTab(selectedTimer.url)
 }
