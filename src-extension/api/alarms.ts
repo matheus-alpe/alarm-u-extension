@@ -12,6 +12,11 @@ function defineAlarm(timer: AlarmInfo) {
 
   const TODAY_DATE = new Date()
 
+  const invalidHour = TODAY_DATE.getHours() >= hours
+  const invalidMinutes = TODAY_DATE.getMinutes() >= minutes
+
+  if (invalidHour && invalidMinutes) return
+
   chrome.alarms.create(timer.id, {
     when: Number(
       new Date(
@@ -25,8 +30,6 @@ function defineAlarm(timer: AlarmInfo) {
       )
     ),
   })
-
-  console.log(hours, minutes, 'alarm setted')
 }
 
 export async function setTimers() {
@@ -40,16 +43,16 @@ type ChromeAlarm = {
 }
 
 export async function notify(alarm: ChromeAlarm) {
-  // TODO: fix alarm trigger
   const timers = await getAllAlarmsInfo()
   const selectedTimer = timers.find((timer) => timer.id === alarm.name)
   if (!selectedTimer) return
+
+  notification.create(selectedTimer)
+
+  if (selectedTimer.url) createTab(selectedTimer.url)
 
   let tabId = await getCurrentTab()
   if (tabId) {
     injectAlertScript(tabId, selectedTimer)
   }
-  notification.create(selectedTimer)
-
-  if (selectedTimer.url) createTab(selectedTimer.url)
 }

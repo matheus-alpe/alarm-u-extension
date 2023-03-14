@@ -1,8 +1,11 @@
-import { getCurrentTab, injectContentScript } from '../api'
+import { createTab, getCurrentTab, injectContentScript } from '../api'
 
 export async function inject() {
   const tabId = await getCurrentTab()
-  if (!tabId) return
+  if (!tabId) {
+    createTab('/index.html')
+    return
+  }
   injectContentScript(tabId, 'content.js')
 }
 
