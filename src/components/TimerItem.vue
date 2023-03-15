@@ -95,7 +95,10 @@ const URLInputStatus = computed(() => {
         />
       </template>
     </NButton>
-
+    <!-- 
+  TODO: change icon to a trashcan
+  TODO: remove index bug
+ -->
     <NButton
       quaternary
       circle

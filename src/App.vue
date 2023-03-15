@@ -6,6 +6,7 @@ import { storage, emitMessage, uuid } from './utils'
 
 import Header from './components/TimerHeader.vue'
 import TimerItem from './components/TimerItem.vue'
+import TimerFooter from './components/TimerFooter.vue'
 
 const timers = reactive<Alarm[]>([])
 
@@ -54,10 +55,7 @@ onBeforeMount(async () => {
     :theme="darkTheme"
     class="container"
   >
-    <Header
-      @add="addTimer"
-      @close="emitMessage('close-modal')"
-    />
+    <Header @close="emitMessage('close-modal')" />
 
     <ul v-if="timers.length">
       <li
@@ -71,6 +69,8 @@ onBeforeMount(async () => {
         />
       </li>
     </ul>
+
+    <TimerFooter @add="addTimer" />
   </NConfigProvider>
 </template>
 
@@ -78,7 +78,7 @@ onBeforeMount(async () => {
 .container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 ul {
@@ -86,6 +86,7 @@ ul {
   padding: 0;
   display: flex;
   flex-flow: column;
-  gap: 10px;
+  gap: 15px;
+  margin-top: 1rem;
 }
 </style>
