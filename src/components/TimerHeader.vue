@@ -13,6 +13,7 @@ defineEmits(['add', 'close'])
   <header>
     <NButton
       dashed
+      circle
       type="primary"
       @click="$emit('add')"
     >
@@ -31,16 +32,18 @@ defineEmits(['add', 'close'])
       Alarm U
     </NH1>
 
-    <!-- TODO: implement close modal -->
-    <NButton
-      quaternary
-      @click="$emit('close')"
-    >
-      <NIcon
-        :component="Dismiss20Filled"
-        size="24"
-      />
-    </NButton>
+    <div>
+      <NButton
+        circle
+        quaternary
+        @click="$emit('close')"
+      >
+        <NIcon
+          :component="Dismiss20Filled"
+          size="24"
+        />
+      </NButton>
+    </div>
   </header>
 </template>
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { debounce } from '../utils'
 import { NTimePicker, NSwitch, NButton, NIcon, NInput } from 'naive-ui'
 import {
@@ -21,7 +21,8 @@ if (timer) {
       Object.entries(timer).forEach(([key, value]) => {
         formData[key as keyof Alarm] = value as any
       })
-      showURLInput.value = !!timer.url
+      if (!timer.url) return
+      showURLInput.value = true
     },
     {
       immediate: true,
@@ -34,6 +35,7 @@ watch(formData, () => {
     formData.active = !!formData.time
   }
 
+  if (showURLInput.value && URLInputStatus.value === 'error') return
   submit()
 })
 
@@ -43,6 +45,11 @@ function toggleURLInput() {
 }
 
 const submit = debounce(() => emit('update', formData))
+
+const URLInputStatus = computed(() => {
+  const validURL = formData.url && /https?\:\/\//.test(formData.url)
+  return validURL ? 'success' : 'error'
+})
 </script>
 
 <template>
@@ -70,13 +77,14 @@ const submit = debounce(() => emit('update', formData))
     <NInput
       v-if="showURLInput"
       v-model:value="formData.url"
+      :status="URLInputStatus"
       placeholder="URL"
     />
 
     <NButton
       quaternary
       circle
-      title="Add URL redirect"
+      :title="showURLInput ? 'Remove URL' : 'Add URL to redirect'"
       :type="showURLInput ? 'error' : 'default'"
       @click="toggleURLInput"
     >
