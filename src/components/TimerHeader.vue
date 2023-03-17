@@ -7,7 +7,12 @@ const emit = defineEmits(['close'])
 const CHROME_HOST = 'chrome-extension://'
 
 function closeAction() {
-  if (window.location.href.includes(CHROME_HOST)) {
+  const URL =
+    window.location != window.parent.location
+      ? document.referrer
+      : document.location.href
+
+  if (URL.includes(CHROME_HOST)) {
     window.close()
     return
   }
