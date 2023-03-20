@@ -60,7 +60,7 @@ onBeforeMount(async () => {
     <ul v-if="timers.length">
       <li
         v-for="(timer, index) in timers"
-        :key="index"
+        :key="timer.id"
       >
         <TimerItem
           :timer="timer"
