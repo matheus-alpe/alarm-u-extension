@@ -7,7 +7,6 @@
     "dev": "vite",
     "build:ext": "vue-tsc && vite build -c src-extension/extension.vite.config.ts",
     "build:all": "vue-tsc && vite build && vite build -c src-extension/extension.vite.config.ts",
-    "preview": "vite preview",
     "clear": "rm -rf ./dist"
   },
   "dependencies": {
