@@ -7,6 +7,7 @@ This extension allows you to set alarms in chrome.
 On alarm triggered shows a notification and open an alert, if has configured a URL will open a new tab with the provided link.
 
 <br/>
+
 ## Production:
 
 Build the application for production:
@@ -16,6 +17,7 @@ pnpm build:all
 ```
 
 <br/>
+
 ## Development:
 
 #### 1 - Install dependencies:
