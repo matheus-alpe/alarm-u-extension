@@ -11,11 +11,14 @@ function defineAlarm(timer: AlarmInfo) {
   const [hours, minutes] = timer.time.split(':').map(Number)
 
   const TODAY_DATE = new Date()
+  const actualHour = TODAY_DATE.getHours()
+  const actualMinute = TODAY_DATE.getMinutes()
 
-  const invalidHour = TODAY_DATE.getHours() >= hours
-  const invalidMinutes = TODAY_DATE.getMinutes() >= minutes
+  if (hours < actualHour) return
 
-  if (invalidHour && invalidMinutes) return
+  const invalidMinutes = minutes <= actualMinute
+
+  if (actualHour == hours && invalidMinutes) return
 
   chrome.alarms.create(timer.id, {
     when: Number(
